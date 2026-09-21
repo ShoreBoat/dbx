@@ -30,3 +30,14 @@ test("normalizes unsupported Kafka auth kinds to none", () => {
 test("does not allow Kerberos auth outside Kafka", () => {
   assert.equal(isMqAuthKindAllowedForSystem("pulsar", "kerberos"), false);
 });
+test("allows the NATS auth modes supported by the native adapter", () => {
+  assert.equal(isMqAuthKindAllowedForSystem("nats", "none"), true);
+  assert.equal(isMqAuthKindAllowedForSystem("nats", "token"), true);
+  assert.equal(isMqAuthKindAllowedForSystem("nats", "basic"), true);
+  assert.equal(isMqAuthKindAllowedForSystem("nats", "apiKey"), false);
+  assert.equal(isMqAuthKindAllowedForSystem("nats", "oauth2"), false);
+  assert.equal(isMqAuthKindAllowedForSystem("nats", "kerberos"), false);
+
+  assert.equal(detectMqUiAuthKind({ systemKind: "nats", authKind: "token" }), "token");
+  assert.equal(detectMqUiAuthKind({ systemKind: "nats", authKind: "oauth2" }), "none");
+});
