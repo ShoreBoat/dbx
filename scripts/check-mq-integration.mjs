@@ -28,6 +28,7 @@ const drivers = Array.isArray(manifest) ? manifest : manifest.drivers;
 assert.ok(drivers?.some((driver) => driver.dbType === "mq"), "Driver manifest must include dbType=mq.");
 const mqDriver = drivers.find((driver) => driver.dbType === "mq");
 assert.ok(mqDriver.driverProfiles?.some((profile) => profile.profile === "rabbitmq"), "MQ driver manifest entry must include a rabbitmq driver profile.");
+assert.ok(mqDriver.driverProfiles?.some((profile) => profile.profile === "nats"), "MQ driver manifest entry must include a nats driver profile.");
 
 const mqHttp = read("apps/desktop/src/lib/backend/mq-http.ts");
 assert.ok(!mqHttp.includes('post("/mq/'), "MQ HTTP client must not call unprefixed /mq paths.");
