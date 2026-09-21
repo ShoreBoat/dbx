@@ -68,6 +68,9 @@ describe("mqConsoleDefaults", () => {
     expect(caps.supportsPeekMessages).toBe(false);
     expect(resolveInitialMqTab({ systemKind: "nats", initialTenant: "_flat_mq" })).toBe("topics");
     expect(resolveAvailableMqTabs({ systemKind: "nats", capabilities: caps })).toEqual(["topics", "subscriptions", "monitoring", "messages", "broker"]);
+
+    const coreOnly = { ...caps, supportsSubscriptions: false, supportsCreateSubscription: false };
+    expect(resolveAvailableMqTabs({ systemKind: "nats", capabilities: coreOnly })).toEqual(["messages", "broker"]);
   });
 
   it("resolves RabbitMQ from driver profile and external config", () => {
