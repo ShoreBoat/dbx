@@ -183,9 +183,12 @@ export function resolveAvailableMqTabs(options: { systemKind?: MqSystemKind; cap
   }
 
   if (systemKind === "nats") {
-    const tabs: MqTab[] = ["topics"];
-    if (capabilities.supportsSubscriptions) tabs.push("subscriptions");
-    tabs.push("monitoring");
+    const tabs: MqTab[] = [];
+    // Core NATS has no enumerable Subject catalog. Streams/Consumers only exist
+    // when JetStream is available, which the adapter reports via subscriptions.
+    if (capabilities.supportsSubscriptions) {
+      tabs.push("topics", "subscriptions", "monitoring");
+    }
     if (capabilities.supportsSendMessage) tabs.push("messages");
     tabs.push("broker");
     return tabs;
