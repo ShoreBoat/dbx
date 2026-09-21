@@ -225,6 +225,11 @@ fn nats_endpoints(config: &MqAdminConfig) -> Result<Vec<NatsEndpoint>, String> {
     values.into_iter().map(|value| parse_nats_endpoint(&value)).collect()
 }
 
+pub(crate) fn primary_nats_endpoint(config: &MqAdminConfig) -> Result<(String, u16), String> {
+    let endpoint = nats_endpoints(config)?.into_iter().next().ok_or("NATS server list is empty")?;
+    Ok((endpoint.host, endpoint.port))
+}
+
 fn split_server_list(value: &str) -> Vec<String> {
     value
         .split(|ch| matches!(ch, ',' | ';' | '\n' | '\r'))
