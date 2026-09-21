@@ -16,6 +16,7 @@ pub enum MqSystemKind {
     RocketMq,
     #[serde(rename = "rabbitmq")]
     RabbitMq,
+    Nats,
 }
 
 impl MqSystemKind {
@@ -25,6 +26,7 @@ impl MqSystemKind {
             MqSystemKind::Kafka => "kafka",
             MqSystemKind::RocketMq => "rocketmq",
             MqSystemKind::RabbitMq => "rabbitmq",
+            MqSystemKind::Nats => "nats",
         }
     }
 }
