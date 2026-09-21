@@ -453,7 +453,7 @@ impl NatsConnection {
         if count == 0 {
             return Err("NATS connection closed by server".to_string());
         }
-        Ok(line.trim_end_matches(['\r', '\n']).to_string())
+        Ok(line.trim_end_matches(&['\r', '\n'][..]).to_string())
     }
 
     async fn write_all(&mut self, bytes: &[u8]) -> Result<(), String> {
