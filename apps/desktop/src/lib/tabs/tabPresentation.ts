@@ -517,6 +517,7 @@ export function tabDatabaseIconType(tab: QueryTab): string {
     if (connection.driver_profile === "kafka" || systemKind === "kafka") return "kafka";
     if (connection.driver_profile === "rocketmq" || systemKind === "rocketmq") return "rocketmq";
     if (connection.driver_profile === "rabbitmq" || systemKind === "rabbitmq") return "rabbitmq";
+    if (connection.driver_profile === "nats" || systemKind === "nats") return "nats";
     if (connection.driver_profile === "pulsar" || systemKind === "pulsar") return "pulsar";
   }
   return connection.driver_profile || connection.db_type;
