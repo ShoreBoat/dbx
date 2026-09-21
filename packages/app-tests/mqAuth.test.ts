@@ -38,6 +38,6 @@ test("allows the NATS auth modes supported by the native adapter", () => {
   assert.equal(isMqAuthKindAllowedForSystem("nats", "oauth2"), false);
   assert.equal(isMqAuthKindAllowedForSystem("nats", "kerberos"), false);
 
-  assert.equal(detectMqUiAuthKind({ systemKind: "nats", authKind: "token" }), "token");
-  assert.equal(detectMqUiAuthKind({ systemKind: "nats", authKind: "oauth2" }), "none");
+  assert.equal(detectMqUiAuthKind({ systemKind: "nats", authKind: "token", saslMechanism: "", jaasConfig: "" }), "token");
+  assert.equal(detectMqUiAuthKind({ systemKind: "nats", authKind: "oauth2", saslMechanism: "", jaasConfig: "" }), "none");
 });
