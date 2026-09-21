@@ -28,8 +28,7 @@ driverProfiles:
     storeOrder: 46
   - profile: nats
     label: NATS
-    storeVisible: true
-    storeOrder: 47
+    agentKey: nats
 supportLevel: connect
 capabilities:
   queryExecution: false
