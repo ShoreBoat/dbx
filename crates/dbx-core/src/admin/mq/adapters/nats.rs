@@ -443,7 +443,7 @@ impl NatsConnection {
         }
 
         connection
-            .write_all(format!("CONNECT {}\r\nPING\r\n", connect).as_bytes())
+            .write_all(format!("CONNECT {connect}\r\nPING\r\n").as_bytes())
             .await?;
         connection.wait_for_pong().await?;
         Ok(connection)
