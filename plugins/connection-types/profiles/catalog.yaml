@@ -668,6 +668,14 @@ profiles:
     user: ""
     host: 127.0.0.1
     category: mq
+  - id: nats
+    dbType: mq
+    label: NATS
+    icon: nats
+    port: 4222
+    user: ""
+    host: 127.0.0.1
+    category: mq
   - id: nacos
     dbType: nacos
     label: Nacos
