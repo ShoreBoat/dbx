@@ -110,6 +110,7 @@ const assetIcons: Record<string, string> = {
   kafka: "kafka",
   rocketmq: "rocketmq",
   rabbitmq: "rabbitmq",
+  nats: "nats",
   nacos: "nacos.png",
   consul: "consul",
   iris: "iris",

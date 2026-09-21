@@ -26,6 +26,9 @@ driverProfiles:
     agentKey: rabbitmq
     storeVisible: true
     storeOrder: 46
+  - profile: nats
+    label: NATS
+    agentKey: nats
 supportLevel: connect
 capabilities:
   queryExecution: false

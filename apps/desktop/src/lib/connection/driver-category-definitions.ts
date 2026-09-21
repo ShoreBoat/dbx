@@ -52,6 +52,7 @@ export const AGENT_DRIVER_CATEGORY_MAP: Readonly<Record<string, DriverCategoryKe
   phoenix: "analytics",
   prestosql: "analytics",
   rabbitmq: "mq",
+  nats: "mq",
   rocketmq: "mq",
   saphana: "analytics",
   snowflake: "analytics",

@@ -54,17 +54,17 @@ const PULSAR_DEFAULT_CAPABILITIES: MqCapabilities = {
 export function resolveMqSystemKindFromConnection(config: ConnectionConfig | undefined): MqSystemKind | undefined {
   if (!config || config.db_type !== "mq") return undefined;
   const external = config.external_config as Partial<MqAdminConfig> | undefined;
-  if (external?.systemKind === "kafka" || external?.systemKind === "rocketmq" || external?.systemKind === "rabbitmq" || external?.systemKind === "pulsar") {
+  if (external?.systemKind === "kafka" || external?.systemKind === "rocketmq" || external?.systemKind === "rabbitmq" || external?.systemKind === "nats" || external?.systemKind === "pulsar") {
     return external.systemKind;
   }
-  if (config.driver_profile === "kafka" || config.driver_profile === "rocketmq" || config.driver_profile === "rabbitmq" || config.driver_profile === "pulsar") {
+  if (config.driver_profile === "kafka" || config.driver_profile === "rocketmq" || config.driver_profile === "rabbitmq" || config.driver_profile === "nats" || config.driver_profile === "pulsar") {
     return config.driver_profile;
   }
   return "pulsar";
 }
 
 export function isFlatMqSystemKind(kind: MqSystemKind | undefined): boolean {
-  return kind === "kafka" || kind === "rocketmq" || kind === "rabbitmq";
+  return kind === "kafka" || kind === "rocketmq" || kind === "rabbitmq" || kind === "nats";
 }
 
 export function defaultMqCapabilitiesForSystemKind(kind: MqSystemKind | undefined): MqCapabilities {
@@ -81,6 +81,18 @@ export function defaultMqCapabilitiesForSystemKind(kind: MqSystemKind | undefine
       supportsMessageQuery: true,
       supportsDlq: true,
       supportsMessageTrace: true,
+    };
+  }
+  if (kind === "nats") {
+    return {
+      ...FLAT_MQ_BASE_CAPABILITIES,
+      supportsPartitionedTopics: false,
+      supportsCreateSubscription: true,
+      supportsResetCursor: false,
+      supportsClearBacklog: false,
+      supportsPeekMessages: false,
+      supportsPermissions: false,
+      supportsClientConnections: false,
     };
   }
   if (kind === "rabbitmq") {
@@ -167,6 +179,18 @@ export function resolveAvailableMqTabs(options: { systemKind?: MqSystemKind; cap
     if (capabilities.supportsMessageQuery || capabilities.supportsSendMessage) tabs.push("messages");
     if (capabilities.supportsMessageTrace) tabs.push("trace");
     if (capabilities.supportsPermissions) tabs.push("permissions");
+    return tabs;
+  }
+
+  if (systemKind === "nats") {
+    const tabs: MqTab[] = [];
+    // Core NATS has no enumerable Subject catalog. Streams/Consumers only exist
+    // when JetStream is available, which the adapter reports via subscriptions.
+    if (capabilities.supportsSubscriptions) {
+      tabs.push("topics", "subscriptions", "monitoring");
+    }
+    if (capabilities.supportsSendMessage) tabs.push("messages");
+    tabs.push("broker");
     return tabs;
   }
 
