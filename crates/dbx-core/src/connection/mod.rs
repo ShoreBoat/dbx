@@ -3759,6 +3759,22 @@ impl AppState {
             return Ok(mqc);
         }
 
+        if mqc.system_kind == crate::mq::types::MqSystemKind::Nats {
+            let transport_layers = self.resolved_transport_layers(config).await?;
+            let (nats_host, nats_port) = crate::mq::adapters::nats::primary_nats_endpoint(&mqc)?;
+            let local_port = db::transport_layer_tunnel::start_transport_layers(
+                connection_id,
+                &transport_layers,
+                &nats_host,
+                nats_port,
+                &self.tunnels,
+                &self.proxy_tunnels,
+                &self.http_tunnels,
+            )
+            .await?;
+            return Ok(mqc.with_connect_override("127.0.0.1", local_port));
+        }
+
         if mqc.system_kind == crate::mq::types::MqSystemKind::Kafka {
             if let Some((bootstrap_host, bootstrap_port)) = kafka_single_loopback_bootstrap_endpoint(&mqc.extra) {
                 let transport_layers = self.resolved_transport_layers(config).await?;
