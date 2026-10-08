@@ -97,6 +97,7 @@ export const databaseSupport: DatabaseSupportItem[] = [
   { id: "kafka", name: "Kafka", icon: "/icons/database/kafka.svg", tone: "#231f20" },
   { id: "rocketmq", name: "RocketMQ", icon: "/icons/database/rocketmq.svg", tone: "#f97316" },
   { id: "rabbitmq", name: "RabbitMQ", icon: "/icons/database/rabbitmq.svg", tone: "#f97316" },
+  { id: "nats", name: "NATS", icon: "/icons/database/nats.svg", tone: "#27aae1" },
   { id: "mqtt", name: "MQTT", icon: "/icons/database/mqtt.svg", tone: "#9828ac" },
   { id: "nacos", name: "Nacos", icon: "/icons/database/nacos.png", tone: "#2f80ed" },
   { id: "consul", name: "Consul", icon: "/icons/database/consul.svg", tone: "#e03875" },

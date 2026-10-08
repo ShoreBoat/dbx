@@ -47,6 +47,32 @@ describe("mqConsoleDefaults", () => {
     expect(resolveAvailableMqTabs({ systemKind: "rocketmq", capabilities: caps })).toEqual(["broker", "topics", "subscriptions", "producers", "messages", "trace", "permissions"]);
   });
 
+  it("resolves NATS as a flat MQ system with JetStream-focused tabs", () => {
+    const config = {
+      id: "mq-nats",
+      db_type: "mq",
+      driver_profile: "nats",
+      external_config: { systemKind: "nats", adminUrl: "", auth: { kind: "none" }, extra: { servers: "nats://127.0.0.1:4222" } },
+    } as ConnectionConfig;
+
+    expect(resolveMqSystemKindFromConnection(config)).toBe("nats");
+    expect(resolveMqSystemKindFromConnection({ ...config, external_config: undefined })).toBe("nats");
+
+    const caps = defaultMqCapabilitiesForSystemKind("nats");
+    expect(caps.supportsTenants).toBe(false);
+    expect(caps.supportsNamespaces).toBe(false);
+    expect(caps.supportsPartitionedTopics).toBe(false);
+    expect(caps.supportsSubscriptions).toBe(true);
+    expect(caps.supportsCreateSubscription).toBe(true);
+    expect(caps.supportsSendMessage).toBe(true);
+    expect(caps.supportsPeekMessages).toBe(false);
+    expect(resolveInitialMqTab({ systemKind: "nats", initialTenant: "_flat_mq" })).toBe("topics");
+    expect(resolveAvailableMqTabs({ systemKind: "nats", capabilities: caps })).toEqual(["topics", "subscriptions", "monitoring", "messages", "broker"]);
+
+    const coreOnly = { ...caps, supportsSubscriptions: false, supportsCreateSubscription: false };
+    expect(resolveAvailableMqTabs({ systemKind: "nats", capabilities: coreOnly })).toEqual(["messages", "broker"]);
+  });
+
   it("resolves RabbitMQ from driver profile and external config", () => {
     const config = {
       id: "mq-2",

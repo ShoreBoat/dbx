@@ -1618,6 +1618,7 @@ async fn test_connection_with_info_inner(
                             dbx_core::mq::types::MqSystemKind::Kafka => "Kafka",
                             dbx_core::mq::types::MqSystemKind::RocketMq => "RocketMQ",
                             dbx_core::mq::types::MqSystemKind::RabbitMq => "RabbitMQ",
+                            dbx_core::mq::types::MqSystemKind::Nats => "NATS",
                         }
                         .to_string(),
                     ),

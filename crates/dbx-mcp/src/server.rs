@@ -1770,7 +1770,7 @@ impl DbxMcpServer {
 
     #[tool(
         name = "dbx_send_message",
-        description = "Send a base64-encoded message to a Kafka, RocketMQ, or RabbitMQ topic/queue"
+        description = "Send a base64-encoded message to a Kafka, RocketMQ, RabbitMQ, or NATS topic/queue/subject"
     )]
     async fn send_message(&self, Parameters(request): Parameters<SendMessageRequest>) -> CallToolResult {
         if let Err(error) = self.ensure_tool_allowed("dbx_send_message").await {

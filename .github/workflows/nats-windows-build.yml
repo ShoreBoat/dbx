@@ -1,0 +1,69 @@
+name: NATS Windows Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/nats-support
+    paths:
+      - .github/workflows/nats-windows-build.yml
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows-x64:
+    name: Windows x64 NSIS
+    runs-on: windows-2022
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 10.27.0
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22.13.0
+          cache: pnpm
+
+      - name: Install frontend dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@1.97.1
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: "./ -> target"
+          shared-key: nats-windows-x64
+          cache-on-failure: true
+
+      - name: Build unsigned Windows installer
+        shell: pwsh
+        run: pnpm tauri build --target x86_64-pc-windows-msvc --config src-tauri/tauri.nats-ci.conf.json
+
+      - name: List bundle output
+        if: always()
+        shell: pwsh
+        run: |
+          if (Test-Path "target/x86_64-pc-windows-msvc/release/bundle") {
+            Get-ChildItem "target/x86_64-pc-windows-msvc/release/bundle" -Recurse -File | Select-Object FullName, Length
+          }
+
+      - name: Upload Windows installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: DBX-NATS-Windows-x64
+          path: target/x86_64-pc-windows-msvc/release/bundle/nsis/*.exe
+          if-no-files-found: error
+          retention-days: 7

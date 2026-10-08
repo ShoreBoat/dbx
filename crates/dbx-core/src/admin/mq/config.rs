@@ -99,6 +99,7 @@ impl MqAdminConfig {
             && parsed.system_kind != MqSystemKind::Kafka
             && parsed.system_kind != MqSystemKind::RocketMq
             && parsed.system_kind != MqSystemKind::RabbitMq
+            && parsed.system_kind != MqSystemKind::Nats
         {
             return Err("Message queue admin URL is empty".to_string());
         }

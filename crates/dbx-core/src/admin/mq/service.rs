@@ -50,6 +50,7 @@ pub async fn mq_database_connection_info(
         MqSystemKind::Kafka => "Kafka",
         MqSystemKind::RocketMq => "RocketMQ",
         MqSystemKind::RabbitMq => "RabbitMQ",
+        MqSystemKind::Nats => "NATS",
     };
     Ok(Some(crate::models::connection::DatabaseConnectionInfo {
         product_name: Some(product_name.to_string()),

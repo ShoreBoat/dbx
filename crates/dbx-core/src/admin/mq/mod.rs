@@ -28,6 +28,7 @@ use tokio::sync::{Mutex, RwLock};
 use crate::db::agent_driver::AgentLaunchSpec;
 use crate::models::connection::ConnectionConfig;
 use crate::mq::adapters::kafka::KafkaAdmin;
+use crate::mq::adapters::nats::NatsAdmin;
 use crate::mq::adapters::pulsar::PulsarAdmin;
 use crate::mq::adapters::rabbitmq::RabbitMqAdmin;
 use crate::mq::adapters::rocketmq::RocketMqAdmin;
@@ -221,6 +222,10 @@ async fn build_adapter(
                 "RabbitMQ adapter requires an agent launch spec. The RabbitMQ agent driver is not installed or not configured.",
             )?;
             let adapter = RabbitMqAdmin::new(mqc, launch).await?;
+            Ok(Arc::new(adapter))
+        }
+        MqSystemKindInternal::Nats => {
+            let adapter = NatsAdmin::new(mqc).await?;
             Ok(Arc::new(adapter))
         }
     }
